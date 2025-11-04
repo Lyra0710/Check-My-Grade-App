@@ -1,5 +1,10 @@
 from statistics import mean, median
-
+'''The following code implements the required functionality for reports. 
+It stores all the grades in a list of dictionaries (basically a memory table). 
+It performs the CRUD operations like add, delete and modify grade. 
+The statistics considered for the report are average, and median. 
+The class also has a helper function '_groupby' (internal method) that groups student_id and course, and validates. 
+Finally, the report is generated consisting of the stats (mean and median), and each row in the group. '''
 class GradeScale:
     def __init__(self):
         self.records = []
@@ -8,6 +13,7 @@ class GradeScale:
     def add_grade(self, student_id, course, grade):
         self.records.append({"student_id": student_id, "course": course, "grade": grade})
 
+    # basically rebuilding the records, excluding the matched record
     def delete_grade(self, student_id, course):
         self.records = [
             r for r in self.records
@@ -43,7 +49,7 @@ class GradeScale:
         return groups
 
     def display_grade_report(self, by="student_id"): 
-        if by == "student":
+        if by == "student": # Just in case there are any aliases
             by = "student_id"
 
         if not self.records:

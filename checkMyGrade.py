@@ -141,6 +141,10 @@ def menu_admin(students: Student, profs: Professor, courses: Course, grades: Gra
                 else:
                     print("Invalid choice. Defaulting to student_id.")
                     sort = "student_id"
+                with open(student_file, newline="") as f:
+                    for row in csv.DictReader(f):
+                        marks_num = float(row["marks"].replace(",", "").strip()) # had some trouble here and learnt that csv fields are always read as strings, even if the value is otherwise. 
+                        grades.add_grade(row["student_id"], row["courses"], marks_num)
                 grades.display_grade_report(sort)
 
             elif choice == "13":
@@ -221,6 +225,7 @@ def main():
     profs = Professor(professor_file)
     courses = Course(course_file)
     grades = GradeScale()
+    
 
     while True:
         print("=== Welcome ===")
