@@ -76,7 +76,7 @@ def menu_admin(students: Student, profs: Professor, courses: Course, grades: Gra
                 marks_raw = input("Enter marks if any (press Enter to skip): ").strip()
                 marks = int(marks_raw) if marks_raw else None
                 u = User(user_id=id, email_address=email, first_name=first, last_name=last, role="student")
-                students.add_new_student(u,login_file,  pw, grade=grade, marks=marks)
+                students.add_new_student(login_file, u, pw, courses, grade, marks)
             elif choice == "3":
                 id = input("Enter id of student to delete: ")
                 students.delete_new_student(id)
@@ -114,9 +114,10 @@ def menu_admin(students: Student, profs: Professor, courses: Course, grades: Gra
                 first = input("Enter first name: ").strip()
                 last = input("Enter last name: ").strip()
                 email = input("Enter email address: ").strip()
+                c_id = input("Enter course id: ").strip()
                 rank = input("Enter rank: ").strip()
                 u = User(user_id=id,email_address=email,first_name=first,last_name=last,role="professor")
-                profs.modify_professor_details(u, rank=rank)
+                profs.modify_professor_details(u, c_id, rank)
 
             # ---------- COURSES --------------------------------------
             elif choice == "9":
@@ -191,9 +192,11 @@ def menu_student(students: Student):
         )
         choice = input("Choose: ").strip()
         if choice == "1":
-            students.check_my_grades(id)
+            s_id = input("Enter your id: ").strip()
+            students.check_my_grades(s_id)
         elif choice == "2":
-            students.check_my_marks(id)
+            s_id = input("Enter your id: ").strip()
+            students.check_my_marks(s_id)
         elif choice == "0":
             return
         else:

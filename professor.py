@@ -77,7 +77,7 @@ class Professor:
         print("Professor deleted successfully!")
         return True
 
-    def modify_professor_details(self, user: User, c_id, rank=None):
+    def modify_professor_details(self, user: User, c_id= None, rank=None):
         rows = []
         found = False
 

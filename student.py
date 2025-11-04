@@ -12,7 +12,7 @@ class Student:
                     for row in reader:
                             print(row)
     
-    def add_new_student(self, login_csv, user:User, password, courses=None,grade=None, marks=None):
+    def add_new_student(self, login_csv, u:User, password, courses=None,grade=None, marks=None):
             exists = False
             with open(self.file, "r", newline="", encoding="utf-8") as f:
                   reader = csv.reader(f)
@@ -23,17 +23,17 @@ class Student:
                         id_idx = header.index("student_id")
 
                   for row in reader:
-                        if row and row[id_idx] == str(user.user_id):
+                        if row and row[id_idx] == str(u.user_id):
                               exists = True
                               break
 
             if exists:
-                  print(f"Student ID {user.user_id} already exists. No record added.")
+                  print(f"Student ID {u.user_id} already exists. No record added.")
                   return False
             with open(self.file, 'a', newline='') as f:
                         writer = csv.writer(f)
-                        writer.writerow([user.user_id, user.email_address, user.first_name, user.last_name, courses if courses is not None else "", grade or "", marks if marks is not None else ""])
-                        print(f"{user.first_name} added successfully!")
+                        writer.writerow([u.user_id, u.email_address, u.first_name, u.last_name, courses if courses is not None else "", grade or "", marks if marks is not None else ""])
+                        print(f"{u.first_name} added successfully!")
             if not os.path.exists(self.file) or os.path.getsize(self.file) == 0:
                   with open(self.file, "w", newline="", encoding="utf-8") as f:
                         csv.writer(f).writerow(["Email", "Password", "Salt", "Role"])
@@ -47,12 +47,12 @@ class Student:
             with open(login_csv, "a", newline="", encoding="utf-8") as f:
                   writer = csv.DictWriter(f, fieldnames=["Email", "Password", "Salt", "Role"])
                   writer.writerow({
-                        "Email": user.email_address,
+                        "Email": u.email_address,
                         "Password": pwd_hash,
                         "Salt": salt_hex,
                         "Role": "student"
                   })
-            print(f"{user.first_name} added successfully!")
+            print(f"{u.first_name} added successfully!")
             return True
         
     
@@ -69,15 +69,15 @@ class Student:
         print(f"Student deleted successfully!")
         
     
-    def update_student_record(self, user:User, courses=None, grade=None, marks=None):
+    def update_student_record(self, u:User, courses=None, grade=None, marks=None):
         rows = []
         with open(self.file, 'r', newline='') as f:
             reader = csv.reader(f)
             for row in reader:
-                  if row and row[0] == user.user_id:
-                        row[1] = user.email_address or row[1]
-                        row[2] = user.first_name or row[2]
-                        row[3] = user.last_name or row[3]
+                  if row and row[0] == u.user_id:
+                        row[1] = u.email_address or row[1]
+                        row[2] = u.first_name or row[2]
+                        row[3] = u.last_name or row[3]
                         if courses is not None:
                               row[4] = courses
                         if grade is not None:
@@ -92,19 +92,24 @@ class Student:
     
     def check_my_grades(self, student_id):
           with open(self.file, 'r', newline='') as f:
-                reader = csv.reader(f)
-                for row in reader:
-                      if row[0] == str(student_id):
-                        print(f"Grade for {row[2]} {row[3]}: {row[5]}")
-                        return
-          print("Student record not found")
+            reader = csv.DictReader(f)  # columns: student_id,email_address,first_name,last_name,courses,grade,marks
+            found = False
+            for row in reader:
+                  if str(row.get("student_id", "")).strip() == str(student_id):
+                  # Show grade (letter) for this student (optionally include course)
+                        print(f"Grade for {row['first_name']} {row['last_name']} ({row['courses']}): {row['grade']}")
+                  found = True
+            if not found:
+                  print("Student record not found")
 
     def check_my_marks(self, student_id):
-            with open(self.file, 'r', newline='') as f:
-                  reader = csv.reader(f)
-                  for row in reader:
-                        if row[0] == str(student_id):
-                              print(f"Marks for {row[2]} {row[3]}: {row[6]}")
-                              return 
-            print("Student not found. ")
+          with open(self.file, 'r', newline='') as f:
+            reader = csv.DictReader(f)
+            found = False
+            for row in reader:
+                  if str(row.get("student_id", "")).strip() == str(student_id):
+                        print(f"Marks for {row['first_name']} {row['last_name']} ({row['courses']}): {row['marks']}")
+                  found = True
+            if not found:
+                  print("Student not found.")
                         
