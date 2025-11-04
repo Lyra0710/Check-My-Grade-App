@@ -19,28 +19,27 @@ marks or student email_address. Report includes the timing it took to sort the r
 - (This allowed me to learn about the time.perf_count function and how to use it).
 -
 ## Object Oriented Design (OOD) for CheckMyGrade Application
-<img width="1388" height="998" alt="Lab_1" src="https://github.com/user-attachments/assets/a64d5988-e648-404d-a4b0-4addcbc9b8fb" />
-## UML Relationships (IS-A vs HAS-A)
+### UML Relationships (IS-A vs HAS-A)
 
 ![UML Diagram](Lab_1.png)
 
-### IS-A (Inheritance) — hollow triangle arrow (child → parent)
+#### IS-A (Inheritance) — hollow triangle arrow (child → parent)
 - **Student → User** : *Student IS-A User*
 - **Professor → User** : *Professor IS-A User*
 
-### HAS-A (Association / Composition) — solid line; diamond indicates composition/aggregation
+#### HAS-A (Association / Composition) — solid line; diamond indicates composition/aggregation
 - **User ──◆── LoginCredential** : *User HAS-A LoginCredential (Composition)*  
   ➤ Filled diamond → **Composition**: LoginCredential cannot exist without User.
 
-- **Course ──◇── GradeScale** : *Course HAS-A GradeScale (Aggregation)*  
-  ➤ Empty diamond → **Aggregation**: GradeScale is used by Course but can exist independently.
+- **Course and GradeScale** : *Course HAS-A GradeScale (Aggregation)*  
+  ➤ Empty diamond is **Aggregation**: GradeScale is used by Course but can exist independently.
 
-- **Student ──► Course** : *Student HAS-A / enrolled_in Course* (many courses per student)
-- **Professor ──► Course** : *Professor HAS-A / teaches Course* (one or more courses)
+- **Student and Course** : *Student HAS-A / enrolled_in Course* (many courses per student)
+- **Professor and Course** : *Professor HAS-A / teaches Course* (one or more courses)
 
 **Legend**
-- **▷** hollow triangle → inheritance (**IS-A**)  
-- **──►** solid line with arrowhead → association (**HAS-A**)  
-- **──◆──** filled diamond → composition (strong HAS-A)  
-- **──◇──** empty diamond → aggregation (weak HAS-A)
+- hollow triangle → inheritance (**IS-A**)  
+- solid line with arrowhead → association (**HAS-A**)  
+- filled diamond → composition (strong HAS-A)  
+- empty diamond → aggregation (weak HAS-A)
 
