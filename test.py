@@ -12,7 +12,7 @@ COURSES_CSV    = "courses.csv"
 LOGIN_CSV      = "login.csv"
 
 def ensure_header(path, header):
-    """Create the CSV with the given header if it doesn't exist or is empty."""
+    # Create the CSV with the given header if it doesn't exist or is empty 
     if (not os.path.exists(path)) or os.path.getsize(path) == 0:
         with open(path, "w", newline="", encoding="utf-8") as f:
             csv.writer(f).writerow(header)
@@ -42,20 +42,56 @@ class BasicTests(unittest.TestCase):
         except Exception:
             pass
 
-        # ---- Seed students.csv to AT LEAST 1000 rows (persistent) ----
+        # Seed students.csv to AT LEAST 1000 rows (persistent)
         random.seed(1)
         rows = read_all(STUDENTS_CSV)
         have = max(0, len(rows) - 1)
-        need = 1000 - have
+        need = 1010 - have
         for i in range(have + 1, have + need + 1):
             sid = str(i)
             email = f"student{i}@example.edu"
             first, last = f"FN{i}", f"LN{i}"
             marks = random.randint(0, 100)
             u = User(sid, email, first, last, "student")
-            # OK if add_new_student returns True or None
             cls.students.add_new_student(LOGIN_CSV, u, password="pw", courses="C101",
                                          grade=("A" if marks > 90 else "B"), marks=marks)
+            
+        # Seed for courses (I am considering 50)
+        rows = read_all(COURSES_CSV)
+        existing_course_ids = {r[0] for r in rows[1:] if r}
+        for i in range(1, 51):
+            cid = f"C{i:03d}"      
+            if cid not in existing_course_ids:
+                try:
+                    cls.courses.add_new_course(
+                        cid,
+                        f"Course {i}",
+                        str(3 + (i % 3)), # since we generally have credits between 3 to 5 
+                        f"Auto-generated course {i}"
+                    )
+                except Exception:
+                    pass
+
+        course_rows = read_all(COURSES_CSV)
+        course_ids = [r[0] for r in course_rows[1:] if r] or ["C101"]
+
+        # seed for profs ( I am taking 100)
+        rows = read_all(PROFESSORS_CSV)
+        existing_prof_ids = {r[0] for r in rows[1:] if r}
+
+        for i in range(1, 101):
+            pid = f"P{i}"
+            if pid in existing_prof_ids:
+                continue
+            # cycling through available courses so each prof teaches at least one course
+            c_id = course_ids[(i - 1) % len(course_ids)]
+            u = User(pid, f"prof{i}@example.edu", f"Prof{i}", "LN", "professor")
+            try:
+                cls.profs.add_new_professor(
+                    LOGIN_CSV, u, password="pw", c_id=c_id, rank="Assistant"
+                )
+            except Exception:
+                pass
 
     # 1) Students add/delete/modify (file must have >= 1000 records)
     def test_students_crud_basic(self):
@@ -153,37 +189,30 @@ class BasicTests(unittest.TestCase):
         t0 = time.perf_counter(); _ = sorted(data, key=lambda r: r[email_i].lower(), reverse=True); t1 = time.perf_counter()
         print(f"[SORT TIMING] email desc: {(t1 - t0):.6f}s")
 
-    # 4) Course add/delete/modify (modify only if your class supports it)
     def test_course_crud_basic(self):
         # add
         try: self.courses.add_new_course("C100", "Data 100", "4", "Intro")
         except Exception: pass
 
-        # modify (only if available)
         if hasattr(self.courses, "modify_course_details"):
             ok = self.courses.modify_course_details("C100", course_name="Data 100X", credits="5", description="Intro+")
             self.assertTrue(ok or ok is None)
 
-        # delete
         self.assertTrue(self.courses.delete_new_course("C100"))
 
-    # 5) Professor add/delete/modify
     def test_professor_crud_basic(self):
-        # make sure a course exists
-        try: self.courses.add_new_course("PX01", "Physics I", "3", "Basics")
+        try: 
+            self.courses.add_new_course("PX01", "Physics I", "3", "Basics")
         except Exception: pass
 
-        # add
         p = User("P1", "prof1@example.edu", "Ada", "Lovelace", "professor")
         try: self.profs.add_new_professor(LOGIN_CSV, p, password="pw", c_id="PX01", rank="Assistant")
         except Exception: pass
 
-        # modify (uses your method)
         p2 = User("P1", "prof1-new@example.edu", "Ada", "Lovelace", "professor")
         ok = self.profs.modify_professor_details(p2, c_id="PX01", rank="Associate")
         self.assertTrue(ok or ok is None)
 
-        # delete
         self.assertTrue(self.profs.delete_professor("P1"))
 
 if __name__ == "__main__":
