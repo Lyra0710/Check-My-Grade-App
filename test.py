@@ -5,7 +5,7 @@ from course import Course
 from user import User
 from login import LoginCredential
 
-# === CSV paths (current folder) ===
+# === CSV file paths (current folder) ===
 STUDENTS_CSV   = "students.csv"
 PROFESSORS_CSV = "professors.csv"
 COURSES_CSV    = "courses.csv"
