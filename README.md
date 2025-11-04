@@ -14,3 +14,4 @@ marks or student email_address. Report includes the timing it took to sort the r
 - Creating a test class. Here I created BasicTests class. 
 - The test methods should start with a `test_`. 
 - We write the code that will show the expected result, then compare it with the actual result using `assertion methods`. # Check-My-Grade-App
+# Check-My-Grade-App
