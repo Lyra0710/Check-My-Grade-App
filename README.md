@@ -18,5 +18,19 @@ marks or student email_address. Report includes the timing it took to sort the r
 - The time taken to search is printed by using the `time.perf_counter` function with timestamps taken at different sections (difference sorting orders). 
 - (This allowed me to learn about the time.perf_count function and how to use it).
 -
--## Object Oriented Design (OOD) for CheckMyGrade Application
-- <img width="1388" height="998" alt="Lab_1" src="https://github.com/user-attachments/assets/a64d5988-e648-404d-a4b0-4addcbc9b8fb" />
+## Object Oriented Design (OOD) for CheckMyGrade Application
+<img width="1388" height="998" alt="Lab_1" src="https://github.com/user-attachments/assets/a64d5988-e648-404d-a4b0-4addcbc9b8fb" />
+### IS-A (Inheritance) — hollow triangle arrow (child → parent)
+- **Student → User** : *Student IS-A User*
+- **Professor → User** : *Professor IS-A User*
+
+### HAS-A (Association / Composition) — solid line; diamond indicates composition/aggregation
+- **User ──► LoginCredential** : *User HAS-A LoginCredential* (authentication link)
+- **Course ──◆── GradeScale** : *Course HAS-A GradeScale* (uses grading scale)
+- **Student ──► Course** : *Student HAS-A / enrolled_in Course* (many courses per student)
+- **Professor ──► Course** : *Professor HAS-A / teaches Course* (one or more courses)
+
+**Legend**
+- **▷** hollow triangle: inheritance (**IS-A**)
+- **──►** solid line with arrowhead: association (**HAS-A**/uses)
+- **──◆──** line with diamond: aggregation/composition (**strong HAS-A**)
