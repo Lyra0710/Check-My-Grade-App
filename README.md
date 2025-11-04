@@ -28,7 +28,7 @@ marks or student email_address. Report includes the timing it took to sort the r
 - **Professor → User** : *Professor IS-A User*
 
 #### HAS-A (Association / Composition) — solid line; diamond indicates composition/aggregation
-- **User ──◆── LoginCredential** : *User HAS-A LoginCredential (Composition)*  
+- **User andLoginCredential** : *User HAS-A LoginCredential (Composition)*  
   ➤ Filled diamond → **Composition**: LoginCredential cannot exist without User.
 
 - **Course and GradeScale** : *Course HAS-A GradeScale (Aggregation)*  
@@ -38,8 +38,8 @@ marks or student email_address. Report includes the timing it took to sort the r
 - **Professor and Course** : *Professor HAS-A / teaches Course* (one or more courses)
 
 **Legend**
-- hollow triangle → inheritance (**IS-A**)  
-- solid line with arrowhead → association (**HAS-A**)  
-- filled diamond → composition (strong HAS-A)  
-- empty diamond → aggregation (weak HAS-A)
+- hollow triangle : inheritance (**IS-A**)  
+- solid line with arrowhead : association (**HAS-A**)  
+- filled diamond : composition (strong HAS-A)  
+- empty diamond : aggregation (weak HAS-A)
 
