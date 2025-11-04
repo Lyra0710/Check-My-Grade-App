@@ -13,6 +13,7 @@ marks or student email_address. Report includes the timing it took to sort the r
 - Learning about the unittest module. 
 - Creating a test class. Here I created BasicTests class. 
 - The test methods should start with a `test_`. 
-- We write the code that will show the expected result, then compare it with the actual result using `assertion methods`. # Check-My-Grade-App
+- We write the code that will show the expected result, then compare it with the actual result using `assertion methods`.
 - The function test_search_timing_basic() reads the students saved in file and searches based on email and id. 
 - The time taken to search is printed by using the `time.perf_counter` function with timestamps taken at different sections (difference sorting orders). 
+- (This allowed me to learn about the time.perf_count function and how to use it). 
